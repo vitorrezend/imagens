@@ -2,6 +2,16 @@ from PIL import Image
 import os
 
 def converter_webp_para_jpg(caminho_entrada, caminho_saida):
+    """
+    Converte imagens WebP para JPEG.
+
+    Args:
+        caminho_entrada (str): O diretório de entrada das imagens WebP.
+        caminho_saida (str): O diretório de saída para as imagens JPEG.
+
+    Raises:
+        OSError: Se ocorrer um erro ao abrir ou salvar as imagens.
+    """
     # Verifica se o diretório de saída existe, caso contrário, cria-o
     if not os.path.exists(caminho_saida):
         os.makedirs(caminho_saida)
@@ -10,19 +20,24 @@ def converter_webp_para_jpg(caminho_entrada, caminho_saida):
     for arquivo in os.listdir(caminho_entrada):
         caminho_arquivo_entrada = os.path.join(caminho_entrada, arquivo)
         if os.path.isfile(caminho_arquivo_entrada) and arquivo.lower().endswith(".webp"):
-            # Abre a imagem WebP usando o Pillow
-            imagem_webp = Image.open(caminho_arquivo_entrada)
-            
-            # Converte a imagem para o formato JPEG
-            nome_arquivo = os.path.splitext(arquivo)[0] + ".jpg"
-            caminho_arquivo_saida = os.path.join(caminho_saida, nome_arquivo)
-            imagem_webp.save(caminho_arquivo_saida, "JPEG")
-            
-            print(f"Arquivo convertido: {caminho_arquivo_saida}")
+            try:
+                # Abre a imagem WebP usando o Pillow
+                imagem_webp = Image.open(caminho_arquivo_entrada)
+                
+                # Converte a imagem para o formato JPEG
+                nome_arquivo = os.path.splitext(arquivo)[0] + ".jpg"
+                caminho_arquivo_saida = os.path.join(caminho_saida, nome_arquivo)
+                imagem_webp.save(caminho_arquivo_saida, "JPEG")
+                
+                print(f"Arquivo convertido: {caminho_arquivo_saida}")
+            except OSError as e:
+                print(f"Erro ao converter {arquivo}: {str(e)}")
 
-# Exemplo de uso
-caminho_entrada = "/home/vitor/Documentos/dalaran/scripts/imagens/webp/sleeves"
-caminho_saida = "/home/vitor/Documentos/dalaran/scripts/imagens/webp/sleeves-jpg"
+def main():
+    caminho_entrada = "/home/vitor/Documentos/dalaran/scripts/imagens/webp/sleeves"
+    caminho_saida = "/home/vitor/Documentos/dalaran/scripts/imagens/webp/sleeves-jpg"
 
-converter_webp_para_jpg(caminho_entrada, caminho_saida)
+    converter_webp_para_jpg(caminho_entrada, caminho_saida)
 
+if __name__ == "__main__":
+    main()
